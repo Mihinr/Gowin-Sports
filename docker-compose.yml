@@ -1,0 +1,106 @@
+version: "3.8"
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: gowin-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-changeme_root_password}
+      MYSQL_DATABASE: ${DB_NAME:-badminton_store}
+      MYSQL_USER: ${DB_USER:-gowin_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-changeme_db_password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/database.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p${DB_ROOT_PASSWORD:-changeme_root_password}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gowin-network
+
+  # Backend API
+  backend:
+    image: mihinr/gowin-backend:latest
+    container_name: gowin-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      DB_HOST: mysql
+      DB_USER: ${DB_USER:-gowin_user}
+      DB_PASSWORD: ${DB_PASSWORD:-changeme_db_password}
+      DB_NAME: ${DB_NAME:-badminton_store}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+      SESSION_SECRET: ${SESSION_SECRET:-change_this_to_a_random_secret_key}
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend/static/images:/app/static/images
+      - ./backend/static/dist:/app/static/dist
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - gowin-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:5000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend
+  frontend:
+    image: mihinr/gowin-frontend:latest
+    container_name: gowin-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - gowin-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost/",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  gowin-network:
+    driver: bridge

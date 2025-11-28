@@ -1,0 +1,125 @@
+.footer {
+  background-color: black;
+  color: white;
+  padding: 40px 0;
+  text-align: center;
+  /* margin-top: 30px; */
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  gap: 60px; /* Increased space between brand and other sections */
+}
+
+.brand {
+  max-width: 300px;
+  flex-grow: 1;
+  margin-right: auto; /* Pushes brand section to the left for better spacing */
+}
+
+.brand .logo {
+  width: 40px;
+  height: 40px;
+  background-color: #70d4fe;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.brand h2 {
+  margin: 10px 0;
+}
+
+.links {
+  display: flex;
+  flex-grow: 1;
+  gap: 50px; /* Increased space between "Company" and "Services" */
+  text-align: justify;
+}
+
+.links h3,
+.connect h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.links ul li {
+  margin: 5px 0;
+}
+
+.links ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.links ul li a:hover {
+  text-decoration: underline;
+}
+
+.connect {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.socialIcons {
+  display: flex;
+  gap: 15px; /* Adjusted spacing for better layout */
+  font-size: 20px;
+}
+
+.socialIcons a {
+  color: white;
+  transition: opacity 0.3s;
+}
+
+.socialIcons a:hover {
+  opacity: 0.7;
+}
+
+.copyright {
+  margin-top: 20px;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* .logoImage {
+    height: 60px;
+    filter: invert(100%) drop-shadow(0 0 2px rgba(10, 10, 10, 0.5));
+    transition: filter 0.3s ease;
+} */
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 30px; /* Adjusted gap for better mobile layout */
+  }
+
+  .brand {
+    margin-right: 0;
+    align-items: center;
+  }
+
+  .links {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Reduced gap for better mobile fit */
+  }
+
+  .connect {
+    align-items: center;
+  }
+}

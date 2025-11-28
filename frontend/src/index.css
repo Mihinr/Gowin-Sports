@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white antialiased;
+  }
+  
+  * {
+    @apply border-black;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* Loading Animation - From Uiverse.io by akshat-patel28 */
+.loader {
+  position: relative;
+  overflow: hidden;
+  border-right: 3px solid;
+  width: 0px;
+  animation: typewriter 2s steps(10) infinite alternate, blink 0.5s steps(10) infinite;
+}
+
+.loader-text {
+  font-size: 40px;
+  font-weight: 700;
+  background: linear-gradient(to right, #70d4fe, #ff77bc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes typewriter {
+  0% {
+    width: 0px;
+  }
+  100% {
+    width: 240px;
+  }
+}
+
+@keyframes blink {
+  0% {
+    border-right-color: rgba(255, 255, 255, 0.75);
+  }
+  100% {
+    border-right-color: transparent;
+  }
+}
